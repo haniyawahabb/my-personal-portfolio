@@ -1,139 +1,1022 @@
-const rain = document.getElementById("rain");
-for(let i=0;i<90;i++){
-  const d=document.createElement("span");
-  d.className="drop";
-  d.style.left=Math.random()*100+"%";
-  d.style.height=(35+Math.random()*65)+"px";
-  d.style.opacity=(.18+Math.random()*.5);
-  d.style.animationDuration=(.7+Math.random()*1.2)+"s";
-  d.style.animationDelay=(-Math.random()*2)+"s";
-  rain.appendChild(d);
-}
+/* =====================================================
+   HANIYA WAHABB — PREMIUM PORTFOLIO SCRIPT
+   ===================================================== */
 
-const navbar=document.getElementById("navbar");
-window.addEventListener("scroll",()=>{
-  navbar.classList.toggle("scrolled",window.scrollY>30);
-});
+document.addEventListener("DOMContentLoaded", () => {
 
-const menuToggle=document.getElementById("menuToggle");
-const navMenu=document.getElementById("navMenu");
-menuToggle.addEventListener("click",()=>navMenu.classList.toggle("open"));
-document.querySelectorAll("#navMenu a").forEach(a=>a.addEventListener("click",()=>navMenu.classList.remove("open")));
+    /* =====================================================
+       NAVBAR
+       ===================================================== */
 
-const revealObserver=new IntersectionObserver(entries=>{
-  entries.forEach((entry,i)=>{
-    if(entry.isIntersecting){
-      entry.target.style.transitionDelay=(i%5)*70+"ms";
-      entry.target.classList.add("visible");
-      revealObserver.unobserve(entry.target);
+    const navbar = document.querySelector(".navbar");
+
+    window.addEventListener("scroll", () => {
+        if (!navbar) return;
+
+        if (window.scrollY > 40) {
+            navbar.classList.add("scrolled");
+        } else {
+            navbar.classList.remove("scrolled");
+        }
+    });
+
+
+    /* =====================================================
+       MOBILE NAVIGATION
+       ===================================================== */
+
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector(".nav-links");
+
+    if (menuToggle && navLinks) {
+        menuToggle.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+            menuToggle.classList.toggle("active");
+        });
+
+        navLinks.querySelectorAll("a").forEach(link => {
+            link.addEventListener("click", () => {
+                navLinks.classList.remove("active");
+                menuToggle.classList.remove("active");
+            });
+        });
     }
-  });
-},{threshold:.12});
-document.querySelectorAll(".reveal").forEach(el=>revealObserver.observe(el));
 
-const sections=document.querySelectorAll("section[id]");
-const navLinks=document.querySelectorAll("#navMenu a");
-const activeObserver=new IntersectionObserver(entries=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      navLinks.forEach(a=>a.classList.toggle("active",a.getAttribute("href")==="#"+entry.target.id));
+
+    /* =====================================================
+       TYPING EFFECT
+       ===================================================== */
+
+    const typedElement =
+        document.querySelector(".typed-text") ||
+        document.querySelector("#typed");
+
+    if (typedElement) {
+
+        const words = [
+            "AI & Data Science Enthusiast",
+            "Python Developer",
+            "Machine Learning Enthusiast",
+            "Deep Learning Developer",
+            "Computer Vision Enthusiast",
+            "AI Application Developer"
+        ];
+
+        let wordIndex = 0;
+        let charIndex = 0;
+        let deleting = false;
+
+        function typeEffect() {
+
+            const currentWord = words[wordIndex];
+
+            if (!deleting) {
+                typedElement.textContent =
+                    currentWord.substring(0, charIndex + 1);
+
+                charIndex++;
+
+                if (charIndex === currentWord.length) {
+                    deleting = true;
+                    setTimeout(typeEffect, 1700);
+                    return;
+                }
+
+            } else {
+
+                typedElement.textContent =
+                    currentWord.substring(0, charIndex - 1);
+
+                charIndex--;
+
+                if (charIndex === 0) {
+                    deleting = false;
+                    wordIndex = (wordIndex + 1) % words.length;
+                }
+            }
+
+            setTimeout(
+                typeEffect,
+                deleting ? 45 : 80
+            );
+        }
+
+        typeEffect();
     }
-  });
-},{rootMargin:"-35% 0px -55% 0px"});
-sections.forEach(s=>activeObserver.observe(s));
 
-const chatToggle=document.getElementById("chatToggle");
-const chatbot=document.getElementById("chatbot");
-document.getElementById("closeChat").onclick=()=>chatbot.classList.remove("open");
-chatToggle.onclick=()=>chatbot.classList.toggle("open");
 
-const input=document.getElementById("chatInput");
-const send=document.getElementById("sendChat");
-const messages=document.getElementById("chatMessages");
+    /* =====================================================
+       SCROLL REVEAL
+       ===================================================== */
 
-const knowledge=[
- {keys:["who","about","introduce","yourself","haniya"],answer:"Haniya Wahabb is an AI & Data Science enthusiast and Python Developer. She is a BS English graduate with professional training in Artificial Intelligence and Data Science. She enjoys turning ideas into practical, technology-driven solutions."},
- {keys:["skill","skills","technology","technologies","stack"],answer:"Haniya works with Python, HTML, CSS and JavaScript; NumPy, Pandas, EDA, data visualization and statistics; machine learning models such as Linear Regression, Logistic Regression, KNN, Decision Tree and Random Forest; and AI technologies including CNN, ANN, Transfer Learning, MobileNetV2, Computer Vision and NLP."},
- {keys:["project","projects","work"],answer:"Haniya has worked on Facial Emotion Recognition, Plant Disease Detection, Fresh Fruit Classification, Car Sales Data Analysis, and Nova AI Chatbot. Her projects cover computer vision, deep learning, data analysis and AI application development."},
- {keys:["emotion","facial"],answer:"Her Facial Emotion Recognition project uses Transfer Learning with MobileNetV2 and TensorFlow/Keras to classify seven emotions: Angry, Disgust, Fear, Happy, Neutral, Sad and Surprise."},
- {keys:["plant","disease"],answer:"Her Plant Disease Detection project uses deep learning and Transfer Learning with MobileNetV2 to detect plant diseases from images, applying AI to an agricultural problem."},
- {keys:["fruit","fresh"],answer:"Her Fresh Fruit Classification project uses CNN-based deep learning and computer vision to identify different types of fresh fruits from images."},
- {keys:["car","sales","analysis"],answer:"Her Car Sales Data Analysis project uses Python, Pandas, NumPy and Matplotlib to clean data, explore patterns, visualize information and generate useful insights."},
- {keys:["nova","chatbot","fastapi"],answer:"Nova AI Chatbot is a web-based AI chatbot built with a FastAPI backend and an HTML, CSS and JavaScript frontend, connected to an AI-powered API."},
- {keys:["education","qualification","degree"],answer:"Haniya is a BS English graduate and has professional training/certification in AI & Data Science."},
- {keys:["service","services","hire"],answer:"Haniya offers Python Development, Data Analysis, Data Visualization, Machine Learning Projects, Deep Learning Projects, Computer Vision Solutions, AI Chatbot Development, and FastAPI & API Development."},
- {keys:["interest","interested","future"],answer:"Haniya is interested in Artificial Intelligence, Data Science, Machine Learning, Deep Learning, Computer Vision, NLP and building practical AI-powered applications."},
- {keys:["contact","email","phone","reach"],answer:"You can contact Haniya at haniyawahab@gmail.com or 03700272600. She is open to internships, learning opportunities, collaborations and meaningful projects."}
-];
+    const revealElements =
+        document.querySelectorAll(
+            ".reveal, .fade-up, .project-card, .skill-card"
+        );
 
-function getAnswer(text){
-  const t=text.toLowerCase();
-  let best=null,score=0;
-  knowledge.forEach(item=>{
-    const s=item.keys.reduce((n,k)=>n+(t.includes(k)?1:0),0);
-    if(s>score){score=s;best=item.answer}
-  });
-  return best || "I can answer questions about Haniya's background, education, skills, projects, services, interests and contact details. Try asking: “What are her skills?”";
-}
+    if ("IntersectionObserver" in window) {
 
-function addMessage(text,type){
-  const el=document.createElement("div");
-  el.className="message "+type;
-  el.textContent=text;
-  messages.appendChild(el);
-  messages.scrollTop=messages.scrollHeight;
-  return el;
-}
+        const revealObserver = new IntersectionObserver(
+            (entries, observer) => {
 
-function speak(text){
-  if(!("speechSynthesis" in window)) return;
-  speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);
-  u.rate=.95;
-  u.pitch=1;
-  u.volume=1;
-  speechSynthesis.speak(u);
-}
+                entries.forEach(entry => {
 
-function typeBot(text){
-  const el=addMessage("", "bot");
-  let i=0;
-  const timer=setInterval(()=>{
-    el.textContent=text.slice(0,++i);
-    messages.scrollTop=messages.scrollHeight;
-    if(i>=text.length){
-      clearInterval(timer);
-      const voice=document.createElement("button");
-      voice.textContent=" 🔊";
-      voice.title="Listen";
-      voice.style.cssText="border:0;background:none;cursor:pointer;font-size:13px";
-      voice.onclick=()=>speak(text);
-      el.appendChild(voice);
-      speak(text);
+                    if (entry.isIntersecting) {
+
+                        entry.target.classList.add("visible");
+
+                        observer.unobserve(entry.target);
+                    }
+                });
+
+            },
+            {
+                threshold: 0.12
+            }
+        );
+
+        revealElements.forEach(element => {
+            revealObserver.observe(element);
+        });
+    } else {
+
+        revealElements.forEach(element => {
+            element.classList.add("visible");
+        });
     }
-  },16);
-}
 
-function sendMessage(text=input.value.trim()){
-  if(!text) return;
-  addMessage(text,"user");
-  input.value="";
-  const answer=getAnswer(text);
-  setTimeout(()=>typeBot(answer),450);
-}
 
-send.onclick=()=>sendMessage();
-input.addEventListener("keydown",e=>{if(e.key==="Enter")sendMessage()});
-document.querySelectorAll(".quick-prompts button").forEach(btn=>{
-  btn.addEventListener("click",()=>sendMessage(btn.dataset.q));
-});
+    /* =====================================================
+       ACTIVE NAV LINK
+       ===================================================== */
 
-document.querySelectorAll(".project").forEach(card=>{
-  card.addEventListener("mousemove",e=>{
-    const r=card.getBoundingClientRect();
-    const x=(e.clientX-r.left)/r.width-.5;
-    const y=(e.clientY-r.top)/r.height-.5;
-    card.style.transform=`perspective(700px) rotateY(${x*2}deg) rotateX(${-y*2}deg)`;
-  });
-  card.addEventListener("mouseleave",()=>card.style.transform="");
+    const sections =
+        document.querySelectorAll("section[id]");
+
+    const navigationLinks =
+        document.querySelectorAll(
+            ".nav-links a[href^='#']"
+        );
+
+    if (sections.length && navigationLinks.length) {
+
+        const sectionObserver = new IntersectionObserver(
+            entries => {
+
+                entries.forEach(entry => {
+
+                    if (entry.isIntersecting) {
+
+                        navigationLinks.forEach(link => {
+                            link.classList.remove("active");
+                        });
+
+                        const activeLink =
+                            document.querySelector(
+                                `.nav-links a[href="#${entry.target.id}"]`
+                            );
+
+                        if (activeLink) {
+                            activeLink.classList.add("active");
+                        }
+                    }
+
+                });
+
+            },
+            {
+                threshold: 0.35
+            }
+        );
+
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+    }
+
+
+    /* =====================================================
+       CURSOR GLOW
+       ===================================================== */
+
+    const cursorGlow =
+        document.querySelector("#cursorGlow");
+
+    if (cursorGlow) {
+
+        let mouseX = 0;
+        let mouseY = 0;
+
+        let currentX = 0;
+        let currentY = 0;
+
+        window.addEventListener("mousemove", event => {
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+        });
+
+        function animateCursor() {
+
+            currentX +=
+                (mouseX - currentX) * 0.12;
+
+            currentY +=
+                (mouseY - currentY) * 0.12;
+
+            cursorGlow.style.transform =
+                `translate3d(${currentX}px, ${currentY}px, 0)`;
+
+            requestAnimationFrame(animateCursor);
+        }
+
+        animateCursor();
+    }
+
+
+    /* =====================================================
+       HERO IMAGE PARALLAX
+       ===================================================== */
+
+    const heroImage =
+        document.querySelector(
+            ".hero-image img, .profile-card img"
+        );
+
+    if (
+        heroImage &&
+        window.matchMedia("(pointer:fine)").matches
+    ) {
+
+        document.addEventListener("mousemove", event => {
+
+            const x =
+                (window.innerWidth / 2 - event.clientX) / 45;
+
+            const y =
+                (window.innerHeight / 2 - event.clientY) / 45;
+
+            heroImage.style.transform =
+                `translate(${x}px, ${y}px) scale(1.03)`;
+        });
+
+    }
+
+
+    /* =====================================================
+       PROJECT CARD 3D TILT
+       ===================================================== */
+
+    const projectCards =
+        document.querySelectorAll(".project-card");
+
+    if (
+        window.matchMedia("(pointer:fine)").matches
+    ) {
+
+        projectCards.forEach(card => {
+
+            card.addEventListener("mousemove", event => {
+
+                const rect =
+                    card.getBoundingClientRect();
+
+                const x =
+                    event.clientX - rect.left;
+
+                const y =
+                    event.clientY - rect.top;
+
+                const centerX =
+                    rect.width / 2;
+
+                const centerY =
+                    rect.height / 2;
+
+                const rotateX =
+                    ((y - centerY) / centerY) * -5;
+
+                const rotateY =
+                    ((x - centerX) / centerX) * 5;
+
+                card.style.transform =
+                    `perspective(900px)
+                     rotateX(${rotateX}deg)
+                     rotateY(${rotateY}deg)
+                     translateY(-8px)`;
+
+            });
+
+            card.addEventListener("mouseleave", () => {
+
+                card.style.transform =
+                    "perspective(900px) rotateX(0) rotateY(0) translateY(0)";
+            });
+
+        });
+    }
+
+
+    /* =====================================================
+       SKILL BAR ANIMATION
+       ===================================================== */
+
+    const skillBars =
+        document.querySelectorAll(
+            ".skill-fill, .progress-fill"
+        );
+
+    if (skillBars.length) {
+
+        const skillObserver =
+            new IntersectionObserver(
+                entries => {
+
+                    entries.forEach(entry => {
+
+                        if (entry.isIntersecting) {
+
+                            const bar =
+                                entry.target;
+
+                            const targetWidth =
+                                bar.dataset.width ||
+                                bar.getAttribute("data-progress") ||
+                                bar.style.width;
+
+                            if (targetWidth) {
+
+                                bar.style.width = "0%";
+
+                                requestAnimationFrame(() => {
+                                    bar.style.width =
+                                        targetWidth;
+                                });
+                            }
+
+                            skillObserver.unobserve(bar);
+                        }
+
+                    });
+
+                },
+                {
+                    threshold: 0.5
+                }
+            );
+
+        skillBars.forEach(bar => {
+            skillObserver.observe(bar);
+        });
+    }
+
+
+    /* =====================================================
+       SMOOTH SCROLL
+       ===================================================== */
+
+    document
+        .querySelectorAll('a[href^="#"]')
+        .forEach(anchor => {
+
+            anchor.addEventListener("click", event => {
+
+                const targetId =
+                    anchor.getAttribute("href");
+
+                if (
+                    !targetId ||
+                    targetId === "#"
+                ) {
+                    return;
+                }
+
+                const target =
+                    document.querySelector(targetId);
+
+                if (target) {
+
+                    event.preventDefault();
+
+                    target.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+                }
+
+            });
+
+        });
+
+
+    /* =====================================================
+       RAIN EFFECT
+       ===================================================== */
+
+    const rainContainer =
+        document.querySelector(".rain");
+
+    if (rainContainer) {
+
+        const numberOfDrops =
+            window.innerWidth < 768 ? 45 : 90;
+
+        rainContainer.innerHTML = "";
+
+        for (let i = 0; i < numberOfDrops; i++) {
+
+            const drop =
+                document.createElement("span");
+
+            drop.className = "rain-drop";
+
+            drop.style.left =
+                Math.random() * 100 + "%";
+
+            drop.style.animationDuration =
+                (0.7 + Math.random() * 1.5) + "s";
+
+            drop.style.animationDelay =
+                Math.random() * 2 + "s";
+
+            drop.style.opacity =
+                0.15 + Math.random() * 0.4;
+
+            rainContainer.appendChild(drop);
+        }
+    }
+
+
+    /* =====================================================
+       CHATBOT
+       ===================================================== */
+
+    const chatButton =
+        document.querySelector(
+            "#chatButton, .chat-button, .chatbot-button"
+        );
+
+    const chatBox =
+        document.querySelector(
+            "#chatBox, .chatbot, .chat-window"
+        );
+
+    const chatClose =
+        document.querySelector(
+            "#chatClose, .chat-close"
+        );
+
+    const chatMessages =
+        document.querySelector(
+            "#chatMessages, .chat-messages"
+        );
+
+    const chatInput =
+        document.querySelector(
+            "#chatInput, .chat-input"
+        );
+
+    const sendButton =
+        document.querySelector(
+            "#sendMessage, .send-message"
+        );
+
+
+    function openChat() {
+
+        if (!chatBox) return;
+
+        chatBox.classList.add("active");
+        chatBox.classList.add("open");
+
+        if (chatInput) {
+            setTimeout(() => {
+                chatInput.focus();
+            }, 250);
+        }
+    }
+
+
+    function closeChat() {
+
+        if (!chatBox) return;
+
+        chatBox.classList.remove("active");
+        chatBox.classList.remove("open");
+    }
+
+
+    if (chatButton) {
+        chatButton.addEventListener(
+            "click",
+            openChat
+        );
+    }
+
+    if (chatClose) {
+        chatClose.addEventListener(
+            "click",
+            closeChat
+        );
+    }
+
+
+    /* =====================================================
+       CHATBOT KNOWLEDGE
+       ===================================================== */
+
+    const portfolioKnowledge = {
+
+        hello: [
+            "Hello! 👋 I'm Haniya's AI portfolio assistant. Ask me anything about her skills, projects, services or background."
+        ],
+
+        skills: [
+            "Haniya works with Python, HTML, CSS, JavaScript, NumPy, Pandas, Matplotlib, Machine Learning, Deep Learning, Computer Vision, NLP, FastAPI and Docker basics."
+        ],
+
+        python: [
+            "Python is one of Haniya's main programming languages. She uses it for Data Analysis, Machine Learning, Deep Learning, Computer Vision and AI applications."
+        ],
+
+        machinelearning: [
+            "Haniya has worked with Linear Regression, Logistic Regression, KNN, Decision Tree and Random Forest, along with model training and evaluation."
+        ],
+
+        deeplearning: [
+            "Her Deep Learning experience includes ANN, CNN, Transfer Learning and MobileNetV2."
+        ],
+
+        projects: [
+            "Haniya's major projects include Facial Emotion Recognition, Plant Disease Detection, Fresh Fruit Classification, Car Sales Data Analysis and Nova AI Chatbot."
+        ],
+
+        emotion: [
+            "Facial Emotion Recognition is a Computer Vision project built using Python, TensorFlow/Keras and MobileNetV2. It recognizes seven emotions: Angry, Disgust, Fear, Happy, Neutral, Sad and Surprise."
+        ],
+
+        plant: [
+            "Plant Disease Detection uses Deep Learning, MobileNetV2 and Computer Vision to identify plant diseases from images."
+        ],
+
+        fruit: [
+            "Fresh Fruit Classification is a CNN-based Computer Vision project developed in Python."
+        ],
+
+        car: [
+            "Car Sales Data Analysis was created using Python, Pandas, NumPy and Matplotlib to analyze and visualize sales data."
+        ],
+
+        chatbot: [
+            "Nova AI Chatbot is an AI-powered application built with Python, FastAPI, HTML, CSS and JavaScript."
+        ],
+
+        services: [
+            "Haniya offers Python Development, Data Analysis, Data Visualization, Machine Learning Projects, Deep Learning Projects, Computer Vision, AI Chatbot Development and FastAPI/API Development."
+        ],
+
+        education: [
+            "Haniya is a BS English graduate and has professional training/certification in Artificial Intelligence and Data Science."
+        ],
+
+        contact: [
+            "You can contact Haniya at haniyawahab@gmail.com or 03700272600."
+        ],
+
+        github: [
+            "You can explore Haniya's GitHub here: github.com/haniyawahabbye"
+        ],
+
+        interests: [
+            "Haniya is interested in Artificial Intelligence, Data Science, Machine Learning, Deep Learning, Computer Vision, NLP and practical AI applications."
+        ]
+
+    };
+
+
+    function getBotResponse(message) {
+
+        const text =
+            message
+                .toLowerCase()
+                .trim();
+
+
+        if (
+            text.includes("hello") ||
+            text.includes("hi") ||
+            text.includes("hey") ||
+            text.includes("salam")
+        ) {
+            return portfolioKnowledge.hello[0];
+        }
+
+
+        if (
+            text.includes("skill") ||
+            text.includes("technology") ||
+            text.includes("tech stack")
+        ) {
+            return portfolioKnowledge.skills[0];
+        }
+
+
+        if (
+            text.includes("python")
+        ) {
+            return portfolioKnowledge.python[0];
+        }
+
+
+        if (
+            text.includes("machine learning") ||
+            text.includes("ml")
+        ) {
+            return portfolioKnowledge.machinelearning[0];
+        }
+
+
+        if (
+            text.includes("deep learning") ||
+            text.includes("cnn") ||
+            text.includes("ann")
+        ) {
+            return portfolioKnowledge.deeplearning[0];
+        }
+
+
+        if (
+            text.includes("project") ||
+            text.includes("projects")
+        ) {
+            return portfolioKnowledge.projects[0];
+        }
+
+
+        if (
+            text.includes("emotion") ||
+            text.includes("facial")
+        ) {
+            return portfolioKnowledge.emotion[0];
+        }
+
+
+        if (
+            text.includes("plant") ||
+            text.includes("disease")
+        ) {
+            return portfolioKnowledge.plant[0];
+        }
+
+
+        if (
+            text.includes("fruit")
+        ) {
+            return portfolioKnowledge.fruit[0];
+        }
+
+
+        if (
+            text.includes("car sales") ||
+            text.includes("sales analysis")
+        ) {
+            return portfolioKnowledge.car[0];
+        }
+
+
+        if (
+            text.includes("nova") ||
+            text.includes("chatbot")
+        ) {
+            return portfolioKnowledge.chatbot[0];
+        }
+
+
+        if (
+            text.includes("service") ||
+            text.includes("hire") ||
+            text.includes("offer")
+        ) {
+            return portfolioKnowledge.services[0];
+        }
+
+
+        if (
+            text.includes("education") ||
+            text.includes("degree") ||
+            text.includes("qualification")
+        ) {
+            return portfolioKnowledge.education[0];
+        }
+
+
+        if (
+            text.includes("contact") ||
+            text.includes("email") ||
+            text.includes("phone")
+        ) {
+            return portfolioKnowledge.contact[0];
+        }
+
+
+        if (
+            text.includes("github")
+        ) {
+            return portfolioKnowledge.github[0];
+        }
+
+
+        if (
+            text.includes("interest") ||
+            text.includes("passion")
+        ) {
+            return portfolioKnowledge.interests[0];
+        }
+
+
+        return "I can tell you about Haniya's skills, projects, education, services, GitHub, contact details and AI/Data Science experience. 🤖";
+    }
+
+
+    /* =====================================================
+       CHAT MESSAGE
+       ===================================================== */
+
+    function addMessage(
+        message,
+        sender = "bot"
+    ) {
+
+        if (!chatMessages) return;
+
+        const messageElement =
+            document.createElement("div");
+
+        messageElement.className =
+            `chat-message ${sender}`;
+
+        messageElement.textContent =
+            message;
+
+        chatMessages.appendChild(
+            messageElement
+        );
+
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+
+        return messageElement;
+    }
+
+
+    /* =====================================================
+       BOT TYPING
+       ===================================================== */
+
+    function showTyping() {
+
+        if (!chatMessages) return;
+
+        const typing =
+            document.createElement("div");
+
+        typing.className =
+            "chat-message bot typing";
+
+        typing.innerHTML =
+            "<span></span><span></span><span></span>";
+
+        typing.id =
+            "typingIndicator";
+
+        chatMessages.appendChild(typing);
+
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+    }
+
+
+    function removeTyping() {
+
+        const typing =
+            document.querySelector(
+                "#typingIndicator"
+            );
+
+        if (typing) {
+            typing.remove();
+        }
+    }
+
+
+    /* =====================================================
+       VOICE RESPONSE
+       ===================================================== */
+
+    function speak(text) {
+
+        if (
+            !("speechSynthesis" in window)
+        ) {
+            return;
+        }
+
+        window.speechSynthesis.cancel();
+
+        const speech =
+            new SpeechSynthesisUtterance(text);
+
+        speech.rate = 0.95;
+        speech.pitch = 1;
+        speech.volume = 1;
+
+        const voices =
+            window.speechSynthesis.getVoices();
+
+        const preferredVoice =
+            voices.find(
+                voice =>
+                    /en-US|en-GB/i.test(
+                        voice.lang
+                    )
+            );
+
+        if (preferredVoice) {
+            speech.voice =
+                preferredVoice;
+        }
+
+        window.speechSynthesis.speak(
+            speech
+        );
+    }
+
+
+    /* =====================================================
+       SEND CHAT
+       ===================================================== */
+
+    function sendMessage() {
+
+        if (!chatInput) return;
+
+        const message =
+            chatInput.value.trim();
+
+        if (!message) return;
+
+        addMessage(
+            message,
+            "user"
+        );
+
+        chatInput.value = "";
+
+        showTyping();
+
+        const response =
+            getBotResponse(message);
+
+        setTimeout(() => {
+
+            removeTyping();
+
+            addMessage(
+                response,
+                "bot"
+            );
+
+            speak(response);
+
+        }, 650);
+    }
+
+
+    if (sendButton) {
+        sendButton.addEventListener(
+            "click",
+            sendMessage
+        );
+    }
+
+
+    if (chatInput) {
+
+        chatInput.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key === "Enter" &&
+                    !event.shiftKey
+                ) {
+
+                    event.preventDefault();
+
+                    sendMessage();
+                }
+
+            }
+        );
+    }
+
+
+    /* =====================================================
+       QUICK CHAT PROMPTS
+       ===================================================== */
+
+    document
+        .querySelectorAll(
+            ".quick-prompt, .quick-btn, [data-prompt]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const prompt =
+                        button.dataset.prompt ||
+                        button.textContent.trim();
+
+                    if (!chatInput) return;
+
+                    chatInput.value =
+                        prompt;
+
+                    sendMessage();
+                }
+            );
+
+        });
+
+
+    /* =====================================================
+       GITHUB LINKS
+       ===================================================== */
+
+    document
+        .querySelectorAll(
+            'a[href*="github.com/haniyawahabbye"]'
+        )
+        .forEach(link => {
+
+            link.setAttribute(
+                "target",
+                "_blank"
+            );
+
+            link.setAttribute(
+                "rel",
+                "noopener noreferrer"
+            );
+        });
+
+
+    /* =====================================================
+       GRADIENT BUBBLE RANDOM MOVEMENT
+       ===================================================== */
+
+    const bubbles =
+        document.querySelectorAll(
+            ".gradient-bubbles .bubble"
+        );
+
+    bubbles.forEach((bubble, index) => {
+
+        bubble.style.animationDelay =
+            `${index * -1.7}s`;
+
+    });
+
+
+    /* =====================================================
+       REDUCE MOTION ACCESSIBILITY
+       ===================================================== */
+
+    const reduceMotion =
+        window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        );
+
+    if (reduceMotion.matches) {
+
+        document
+            .querySelectorAll(
+                "*"
+            )
+            .forEach(element => {
+
+                element.style.animationDuration =
+                    "0.01ms";
+
+                element.style.transitionDuration =
+                    "0.01ms";
+            });
+    }
+
+
+    console.log(
+        "✨ Haniya Wahabb Premium Portfolio Loaded Successfully!"
+    );
+
 });
